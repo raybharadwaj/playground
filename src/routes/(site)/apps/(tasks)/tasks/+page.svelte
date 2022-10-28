@@ -1,21 +1,10 @@
 <script>
-
     import Task from "$lib/components/tasks/Task.svelte";
     import TaskForm from "$lib/components/tasks/TaskForm.svelte";
-    import {TasksStore} from "$lib/stores/TasksStore.js";
     import {flip} from "svelte/animate";
 
-    let taskData = [];
-    TasksStore.subscribe((data) => {
-        if (data) {
-            taskData = data.reverse();
-        } else {
-            taskData = []
-        }
-    });
-
-    // export let data;
-
+    export let data;
+    let taskData = data.tasksData;
 </script>
 
 <div id="tasks-app" class="app">
@@ -24,7 +13,7 @@
 
         <TaskForm/>
 
-        {#each taskData as task(task.id)}
+        {#each taskData as task(task._id)}
             <div animate:flip={{duration: 50}}>
                 <Task {task}/>
             </div>

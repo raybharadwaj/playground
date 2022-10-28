@@ -1,9 +1,13 @@
 import { json } from '@sveltejs/kit';
+import db from "$lib/server/db.js"
 
 /** @type {import('./$types').RequestHandler} */
 export async function GET ({ }) {
-    console.log("At GET");
-    return json({});
+    const data = await db.collection('tasks').find({}).toArray();
+
+    return json({
+        data
+    });
 }
 
 /** @type {import('./$types').RequestHandler} */

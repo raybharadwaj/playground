@@ -1,20 +1,10 @@
 <script>
-    import {TasksStore, randID} from "$lib/stores/TasksStore.js";
+
 
     let taskBody = "";
 
     const addTask = () => {
-        if(taskBody) {
-            TasksStore.update(data => [...data.reverse(), {
-                    body: taskBody,
-                    completed: false,
-                    id: randID()
-                }]
-            );
-            taskBody = "";
-        } else {
-        //    validate
-        }
+
     }
 
 

@@ -7,9 +7,7 @@ const collection = db.collection('tasks');
 export async function GET ({ params }) {
 
         const data = await collection.find({}).toArray();
-        return json({
-            data : data.reverse()
-        });
+        return json(data.reverse());
 
 }
 

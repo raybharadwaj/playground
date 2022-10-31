@@ -1,10 +1,15 @@
 <script>
-
+    import axios from "axios";
+    import {updateTasksStore} from "$lib/stores/TasksStore.js";
 
     let taskBody = "";
 
-    const addTask = () => {
-
+    const addTask = async () => {
+        let postData = {
+            body: taskBody
+        }
+        await axios.post("/api/tasks", postData);
+        await updateTasksStore();
     }
 
 

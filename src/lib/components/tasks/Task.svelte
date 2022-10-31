@@ -1,54 +1,40 @@
 <script>
-    import {TasksStore} from "$lib/stores/TasksStore.js";
+    import {updateTasksStore} from "$lib/stores/TasksStore.js"
+    import axios from "axios";
+
     export let task;
     let updateMode = false;
 
-    const updateTasks = () => {
-        TasksStore.update(data => {
-            let updatedData = [];
-            if (data) {
-                data.reverse().forEach((taskObj) => {
-                    if (taskObj.id === task.id) {
-                        updatedData.push({
-                            body: task.body,
-                            completed: task.completed,
-                            id: task.id
-                        })
-                    } else {
-                        updatedData.push(taskObj);
-                    }
-                });
-                updateMode = false;
-                return updatedData;
-            }
-        });
+    const updateTask = async () => {
+        try {
+            await axios.patch(`/api/task/${task._id}`, task);
+            await updateTasksStore();
+            updateMode = false;
+        } catch(err) {
+            console.log(err.message);
+        }
     }
 
-    const deleteTask = () => {
-        TasksStore.update(data => {
-            let updatedData = [];
-            if (data) {
-                data.reverse().forEach((taskObj) => {
-                    if (taskObj.id !== task.id) {
-                        updatedData.push(taskObj);
-                    }
-                });
-                return updatedData;
-            }
-        });
+    const deleteTask = async () => {
+        try {
+            await axios.delete(`/api/task/${task._id}`);
+            await updateTasksStore();
+        } catch(err) {
+            console.log(err.message);
+        }
     }
 </script>
 
 <div class="task-component component">
     <div class="wrapper" class:completed={task.completed}>
 
-        <div class="task-body" class:strikethrough={task.completed}>
+        <div class="task-title" class:strikethrough={task.completed}>
             {#if !updateMode}
                 <span on:click={() => updateMode = !updateMode} on:keyup>
-                    {task.body}
+                    {task.title}
                 </span>
             {:else}
-                <textarea bind:value={task.body}></textarea>
+                <textarea bind:value={task.title}></textarea>
             {/if}
         </div>
 
@@ -56,7 +42,7 @@
             {#if !updateMode}
                 <button on:click={() => {
                     task.completed = !task.completed
-                    updateTasks();
+                    updateTask();
                 }}>
                     {#if !task.completed}
                         Complete
@@ -66,7 +52,7 @@
                 </button>
                 <button on:click={deleteTask}>Delete</button>
             {:else}
-                <button on:click={updateTasks}>Update</button>
+                <button on:click={updateTask}>Update</button>
                 <button on:click={() => updateMode = !updateMode}>Cancel</button>
             {/if}
         </div>
@@ -92,7 +78,7 @@
         background: mediumseagreen;
     }
 
-    .task-body {
+    .task-title {
         margin-bottom: 0.5rem;
         color: white;
         font-size: larger;

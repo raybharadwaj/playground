@@ -1,8 +1,8 @@
 import db from "$lib/server/db.js";
 
 export class Task {
-    constructor() {
-        this.title = "";
+    constructor(title) {
+        this.title = title | "";
         this.completed = false;
         this.steps = 0;
         this.createdDateTime = new Date();

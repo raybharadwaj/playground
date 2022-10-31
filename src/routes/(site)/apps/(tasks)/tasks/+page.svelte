@@ -2,18 +2,19 @@
     import Task from "$lib/components/tasks/Task.svelte";
     import TaskForm from "$lib/components/tasks/TaskForm.svelte";
     import {flip} from "svelte/animate";
+    import {TasksStore} from "$lib/stores/TasksStore.js";
 
-    export let data;
-    let taskData = data.tasksData;
+    let tasksData = [];
+    TasksStore.subscribe(data => tasksData = data);
 </script>
 
 <div id="tasks-app" class="app">
     <div class="wrapper">
         <h1>Get 'em done!</h1>
 
-        <TaskForm/>
+        <TaskForm />
 
-        {#each taskData as task(task._id)}
+        {#each tasksData as task(task._id)}
             <div animate:flip={{duration: 50}}>
                 <Task {task}/>
             </div>

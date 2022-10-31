@@ -1,25 +1,23 @@
 import { json, error } from '@sveltejs/kit';
 import db from "$lib/server/db.js";
+import {Task} from "$lib/server/models/Task.js";
 
-const collection = db.collection('tests');
+const collection = db.collection('tasks');
 
 /** @type {import('./$types').RequestHandler} */
-export async function GET ({ routeId }) {
+export async function GET ({ params }) {
     const data = await collection.find({}).toArray();
-    return json(data);
+    return json(data.reverse());
 }
 
 /** @type {import('./$types').RequestHandler} */
 export async function POST ({ request }) {
-    const requestData = await request.json();
-
+    let requestData = await request.json();
+    let taskObj = new Task;
+    taskObj.title = requestData.body
     try {
-        await collection.insertOne({
-            body: requestData.body,
-            completed: requestData.completed
-        });
+        const response = await collection.insertOne(taskObj);
         return json({
-            //send success message, on success update store
             message: "Data Posted",
         });
     } catch(err) {

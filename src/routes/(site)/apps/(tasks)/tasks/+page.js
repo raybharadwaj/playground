@@ -1,12 +1,15 @@
-// import { redirect } from '@sveltejs/kit';
+import { redirect } from '@sveltejs/kit';
 
 /** @type {import('./$types').PageLoad} */
 export async function load({ fetch }) {
-    let request = await fetch('/apps/tasks.json');
-    let response = await request.json();
-    let tasksData = response.data;
-
-    return {
-        tasksData
+    try {
+        let response = await fetch('/apps/tasks.json');
+        let responseData = await response.json();
+        let tasksData = responseData.data;
+        return {
+            tasksData
+        }
+    } catch(err) {
+        throw redirect(404, '/');
     }
 }

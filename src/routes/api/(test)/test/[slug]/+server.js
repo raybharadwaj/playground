@@ -7,10 +7,12 @@ const collection = db.collection('tests');
 /** @type {import('./$types').RequestHandler} */
 export async function GET ({ routeId, params, url }) {
     if(ObjectId.isValid(params.slug)) {
-        let searchParamsObj = {};
-        for (const [key, value] of url.searchParams.entries()) {
-            searchParamsObj[key] = value
-        }
+        // let searchParamsObj = {};
+        // for (const [key, value] of url.searchParams.entries()) {
+        //     searchParamsObj[key] = value
+        // }
+
+        let searchParams = Object.fromEntries(url.searchParams.entries());
 
         const data = await collection.find({
             _id: ObjectId(params.slug)
@@ -27,7 +29,7 @@ export async function GET ({ routeId, params, url }) {
                 port: url.port,
                 pathname: url.pathname,
                 searchParamsString: url.search,
-                searchParams:  searchParamsObj
+                searchParams
             },
             data
         });

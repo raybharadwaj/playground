@@ -1,5 +1,6 @@
 <script>
     import {updateTasksStore} from "$lib/stores/TasksStore.js"
+    import {fade} from "svelte/transition"
     import axios from "axios";
 
     export let task;
@@ -10,7 +11,7 @@
             await axios.patch(`/api/task/${task._id}`, task);
             await updateTasksStore();
             updateMode = false;
-        } catch(err) {
+        } catch (err) {
             console.log(err.message);
         }
     }
@@ -19,7 +20,7 @@
         try {
             await axios.delete(`/api/task/${task._id}`);
             await updateTasksStore();
-        } catch(err) {
+        } catch (err) {
             console.log(err.message);
         }
     }
@@ -40,16 +41,17 @@
 
         <div class="task-actions">
             {#if !updateMode}
-                <button on:click={() => {
-                    task.completed = !task.completed
-                    updateTask();
-                }}>
-                    {#if !task.completed}
-                        Complete
-                    {:else}
-                        Undo
-                    {/if}
-                </button>
+                {#if !task.completed}
+                    <button on:click={() => {
+                        task.completed = !task.completed
+                        updateTask();
+                    }}>Complete</button>
+                {:else}
+                    <button on:click={() => {
+                        task.completed = !task.completed
+                        updateTask();
+                    }}>Undo</button>
+                {/if}
                 <button on:click={deleteTask}>Delete</button>
             {:else}
                 <button on:click={updateTask}>Update</button>

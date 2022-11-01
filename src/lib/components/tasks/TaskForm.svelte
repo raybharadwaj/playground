@@ -10,6 +10,7 @@
         }
         await axios.post("/api/tasks", postData);
         await updateTasksStore();
+        taskBody = ""
     }
 
 
@@ -19,7 +20,7 @@
     <div class="wrapper">
         <form on:submit|preventDefault={addTask}>
             <input type="text" placeholder="Enter your Task" bind:value="{taskBody}" required>
-            <button>Submit</button>
+            <button>Add</button>
         </form>
     </div>
 </div>

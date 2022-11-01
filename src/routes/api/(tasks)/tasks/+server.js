@@ -7,7 +7,7 @@ const collection = db.collection('tasks');
 /** @type {import('./$types').RequestHandler} */
 export async function GET ({ params }) {
     const data = await collection.find({}).toArray();
-    return json(data.reverse());
+    return json(data);
 }
 
 /** @type {import('./$types').RequestHandler} */
@@ -16,7 +16,7 @@ export async function POST ({ request }) {
     let taskObj = new Task;
     taskObj.title = requestData.body
     try {
-        const response = await collection.insertOne(taskObj);
+        await collection.insertOne(taskObj);
         return json({
             message: "Data Posted",
         });
